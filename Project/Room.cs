@@ -40,7 +40,12 @@ namespace CastleGrimtol.Project
            if(item.Name == "book"){
                Console.WriteLine(@"As you begin to read the book, smoke swirls around your body. 
 You continue to read and as you finish the sentence a swirls of light and smoke engulfs you.");
-           }           
+           } 
+           if(item.Name == "sword"){
+                Console.WriteLine(@"You get into a fighting stance and prepare for battle.
+The Dragon watches for a few seconds then engulfs you in massive fireball that burns you to ash
+and melts the stone arond where you stood");
+           }          
         }   
 
         public Room(string name, string description){
