@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CastleGrimtol.Project;
 
@@ -36,7 +37,10 @@ namespace CastleGrimtol.Project
         // }
         public void UseItem(Item item)
         {
-           
+           if(item.Name == "book"){
+               Console.WriteLine(@"As you begin to read the book, smoke swirls around your body. 
+You continue to read and as you finish the sentence a swirls of light and smoke engulfs you.");
+           }           
         }   
 
         public Room(string name, string description){

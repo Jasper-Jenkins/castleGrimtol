@@ -11,9 +11,9 @@ namespace CastleGrimtol.Project
        
         public List<Item> Inventory { get; set; }
 
-        public Player(string name, List<Item> items){
+        public Player(string name){
             Name = name;
-            Inventory = items;
+            Inventory = new List<Item>();
         }
     }
 }
