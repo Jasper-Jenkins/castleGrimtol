@@ -9,9 +9,10 @@ namespace CastleGrimtol.Project
     {
         public Room CurrentRoom { get; set; }
         public Player CurrentPlayer { get; set; }
+        public Boolean inGame {get; set;}
         public void Reset()
         {
-
+            Setup();
         }
 
         public void Play()
@@ -19,17 +20,19 @@ namespace CastleGrimtol.Project
             if(CurrentPlayer.Alive == true){
                 Console.WriteLine("Still Alive!");
             }else{
+                Console.Clear();
                 Console.WriteLine("You fucked up!");
+                Reset();
             }
             //  Console.Clear();
             Console.WriteLine("You are in the " + CurrentRoom.Name + " room!");
             if (CurrentRoom.Items.Count == 0)
             {
+                Console.WriteLine(CurrentRoom.Description);
                 Console.WriteLine("The room is empty, except for you!");
             }
             else
             {
-
                 string roomItems = "";
                 for (var i = 0; i < CurrentRoom.Items.Count; i++)
                 {
@@ -39,11 +42,10 @@ namespace CastleGrimtol.Project
                     }
                     roomItems += CurrentRoom.Items[i].Name + " ";
                 }
-
+                Console.WriteLine(CurrentRoom.Description);
                 Console.WriteLine(@"There is a " + roomItems + "in the room");
             }
-
-            Console.WriteLine("Where do you want to go?");
+            Console.WriteLine("What would you like to do!");
 
             string userInput = "";
             userInput = Console.ReadLine().ToLower().Trim();
@@ -55,6 +57,16 @@ namespace CastleGrimtol.Project
             };
             switch (input[0])
             {
+                case "restart":
+                    Console.Clear();
+                    Console.WriteLine(@"You have chosen to give up, but unfortunately for you that is not how you escape!
+
+");
+                    Reset();
+                break;
+                case "quit":
+                    inGame = false;
+                break;
                 case "go":
                     if (input.Length == 1)
                     {
@@ -83,9 +95,12 @@ namespace CastleGrimtol.Project
                     else
                     {
                         Console.Clear();
+                        var checker = 0;
                         for (var i = 0; i < CurrentRoom.Items.Count; i++)
                         {
-                            //   Console.WriteLine(CurrentRoom.Items[i].Name);
+                            if(input[1] == CurrentRoom.Items[i].Name){
+                                checker++;
+                            }
 
                             if (input[1] == CurrentRoom.Items[i].Name)
                             {
@@ -94,7 +109,11 @@ namespace CastleGrimtol.Project
                                 CurrentPlayer.Inventory.Add(CurrentRoom.Items[i]);
                                 CurrentRoom.Items.Remove(CurrentRoom.Items[i]);
                                 Console.WriteLine("You have picked up a " + itemName);
-                            };
+                            }
+                           
+                        }
+                        if(checker<1){
+                                 Console.WriteLine("There is no " + input[1] + " in this room.");
                         }
                     }
                     break;
@@ -109,37 +128,53 @@ namespace CastleGrimtol.Project
                     {
                         for (var i = 0; i < CurrentPlayer.Inventory.Count; i++)
                         {
-                            Console.WriteLine(CurrentPlayer.Inventory[i].Name);
+                           
+                           
+                           
+                            Console.ForegroundColor = ConsoleColor.DarkCyan;
+                            Console.WriteLine(@"                         "+CurrentPlayer.Inventory[i].Name);
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                     }
                     break;
                 case "help":
                     Console.Clear();
-                    Console.Write(@"Commands: 
-
-    go <cardinal direction>: 'go north'
-    take <name of item in room>: 'take torch'
-    inventory: 'inventory'
-    help: 'help'
-
+                    Console.WriteLine(@"                        Commands: 
+                    ___________________________________________________
+                                                                    
+                        go <cardinal direction>: 'go north'           
+                        take <name of item in room>: 'take torch'     
+                        use <name of item in invetory>: 'use sword'
+                        drop <name of item in inventory>: 'drop
+                         scroll'
+                        restart: 'restart'   
+                        inventory: 'inventory'                        
+                        help: 'help'                                  
+                    ___________________________________________________
 ");
                     break;
                 case "use":
-                    Console.Clear();
-                    UseItem(input[1]);
-                    // if(CurrentRoom.Name == "main" && input[1] == "book"){
-                    //     Item usedItem = CurrentPlayer.Inventory.Find(x=> x.Name.Contains("book"));
-                    //     CurrentRoom.UseItem(usedItem);
-                    //     CurrentRoom = CurrentRoom.Go(input[1]);
-                    // }
-                    // else if(CurrentRoom.Name == "book" && input[1] == "book"){
-                    //     Item usedItem = CurrentPlayer.Inventory.Find(x=> x.Name.Contains("book"));
-                    //     CurrentRoom.UseItem(usedItem);
-                    //     CurrentRoom = CurrentRoom.Go("main");
-                    // }else{
-                    //     Console.WriteLine(input[1] + " is of no use to you here.");
-                    // }
+                    if(input.Length==1){
+                        Console.Clear();
+                        Console.WriteLine("You did not choose an item to use!");
+                    }else{
+                        Console.Clear();
+                        UseItem(input[1]);
+                    }
                     break;
+                case "drop":
+                    if(input.Length==1){
+                        Console.Clear();
+                        Console.WriteLine("You did not choose an item to drop!");
+                    }else{
+                        Console.Clear();
+                        DropItem(input[1]);
+                    }
+                   break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine("\""+ input[0] +"\" is not a proper Command, figure out what else you can do");
+                break;
             };
 
         }
@@ -147,26 +182,26 @@ namespace CastleGrimtol.Project
         {
             //  int[,] rooms = new int[,]{{},{},{},{},{}};
             Player player1 = new Player("Player1");
+            inGame = true;
 
             Room room1 = new Room("main", "Dark and Dreary, worn and weary");
             Room room2 = new Room("north", "Dark as fuck, better find a light");
             Room room3 = new Room("east", "Lots of light, better find some shade");
-            Room room4 = new Room("book", "So much water, can you swim?");
+            Room room4 = new Room("scroll", "So much water, can you swim?");
             Room room5 = new Room("west", "So much fire, are you fire proof");
-
 
             Item torch = new Item("torch", "Helps brings light to the darkness");
             Item sword = new Item("sword", "Helps fight the darkness");
-            Item book = new Item("book", "Helps to know the darkness");
+            Item scroll = new Item("scroll", "Helps to know the darkness");
 
             room1.exits.Add("north", room2);
             room1.exits.Add("east", room3);
             room1.exits.Add("west", room5);
-            room1.exits.Add("book", room4);
+            room1.exits.Add("scroll", room4);
 
             room1.Items.Add(torch);
             room1.Items.Add(sword);
-            room1.Items.Add(book);
+            room1.Items.Add(scroll);
 
 
 
@@ -188,33 +223,32 @@ namespace CastleGrimtol.Project
         }
         public void UseItem(string itemName)
         {
-
             switch (itemName)
             {
-                case "book":
+                case "scroll":
                     if (CurrentRoom.Name == "main")
                     {
-                        Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("book"));
+                        Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("scroll"));
                         if (usedItem != null)
                         {
                             CurrentRoom.UseItem(usedItem);
                             CurrentRoom = CurrentRoom.Go(itemName);
-                            System.Console.WriteLine(itemName + " : " + CurrentRoom.Name );
+                        // System.Console.WriteLine(itemName + " : " + CurrentRoom.Name );
                             break;
-                        }else{ //handle no book in inventory
+                        }else{ //handle no scroll in inventory
                             Console.WriteLine("You do not have that item in your inventory");
                         }
                         break;
                     }
-                    else if (CurrentRoom.Name == "book")
+                    else if (CurrentRoom.Name == "scroll")
                     {
-                        //System.Console.WriteLine("Using book in Book Room..........");
-                        Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("book"));
+                        //System.Console.WriteLine("Using scroll in scroll Room..........");
+                        Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("scroll"));
                         if (usedItem != null)
                         {
-                        CurrentRoom.UseItem(usedItem);
-                        CurrentRoom = CurrentRoom.Go("main");
-                        break;
+                            CurrentRoom.UseItem(usedItem);
+                            CurrentRoom = CurrentRoom.Go("main");
+                            break;
                         }else{
                             Console.WriteLine("You do not have that item in your inventory");
                         }
@@ -230,9 +264,9 @@ namespace CastleGrimtol.Project
                         Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("sword"));
                         if (usedItem != null)
                         {
-                            //CurrentRoom.UseItem(usedItem);
-                         //   CurrentRoom = CurrentRoom.Go(itemName);
-                            Console.WriteLine("You swing the sword around a few time to test its weight.");
+                            // CurrentRoom.UseItem(usedItem);
+                            // CurrentRoom = CurrentRoom.Go(itemName);
+                            Console.WriteLine("You swing the sword around a few times to test its weight.");
                             break;
                         }else{ //handle no book in inventory
                             Console.WriteLine("You do not have that item in your inventory");
@@ -245,10 +279,10 @@ namespace CastleGrimtol.Project
                         Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("sword"));
                         if (usedItem != null)
                         {
-                        CurrentRoom.UseItem(usedItem);
-                        CurrentPlayer.Alive = false; 
-                      //  CurrentRoom = CurrentRoom.Go("main");
-                        break;
+                            CurrentRoom.UseItem(usedItem);
+                            CurrentPlayer.Alive = false; 
+                            //CurrentRoom = CurrentRoom.Go("main");
+                            break;
                         }else{
                             Console.WriteLine("You do not have that item in your inventory");
                         }
@@ -259,7 +293,21 @@ namespace CastleGrimtol.Project
                     }
                     break;
                 case "torch":
-                    break;
+                   
+                break;
+            }
+        }
+
+        public void DropItem(string itemName){
+            for (var i = 0; i < CurrentPlayer.Inventory.Count; i++)
+            {
+                if (itemName == CurrentPlayer.Inventory[i].Name)
+                {   Console.Clear();
+                    CurrentRoom.Items.Add(CurrentPlayer.Inventory[i]);
+                    CurrentPlayer.Inventory.Remove(CurrentPlayer.Inventory[i]);
+                    Console.WriteLine("You have dropped a " + itemName);
+                }
+                
             }
         }
     }

@@ -15,12 +15,12 @@ namespace CastleGrimtol.Project
         // string Name { get; set; }
         // string Description { get; set; }
         // List<Item> Items { get; set; }
-        //   void UseItem();
+        // void UseItem();
        
         
-        public Room Go(string direction){
+        public Room Go(string direction){ //ask questions about that
             if(exits.ContainsKey(direction)){
-                return exits[direction];
+                return exits[direction]; //returns the value from the key exits[direction] 
             }
             return null;
         }
@@ -37,15 +37,18 @@ namespace CastleGrimtol.Project
         // }
         public void UseItem(Item item)
         {
-           if(item.Name == "book"){
-               Console.WriteLine(@"As you begin to read the book, smoke swirls around your body. 
-You continue to read and as you finish the sentence a swirls of light and smoke engulfs you.");
+           if(item.Name == "scroll"){
+               Console.WriteLine(@"
+               As you begin to read the scroll, smoke swirls around your body. As you utter the 
+               final words you are consumed by a swirl of light and smoke.
+               ");
            } 
            if(item.Name == "sword"){
-                Console.WriteLine(@"You get into a fighting stance and prepare for battle.
-The Dragon watches for a few seconds then engulfs you in massive fireball that burns you to ash
-and melts the stone arond where you stood");
-           }          
+                Console.WriteLine(@"                You get into a fighting stance.
+            A Dragon watches for a few seconds, then engulfs you
+            in massive fireball that burns you to ash
+            and melts the stone where you stood");
+           }      
         }   
 
         public Room(string name, string description){
