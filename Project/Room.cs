@@ -9,6 +9,8 @@ namespace CastleGrimtol.Project
         public Dictionary<string, Room> exits = new Dictionary<string, Room>();
         public string Name { get; set; }
         public string Description { get; set; }
+
+        
         public List<Item> Items { get; set; }
 
 
