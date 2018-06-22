@@ -8,7 +8,7 @@ namespace textadventure
         {
             Game castleGame = new Game();
             castleGame.Setup();
-            Console.Clear();
+            
            // bool inGame = true;
             while(castleGame.inGame){
               

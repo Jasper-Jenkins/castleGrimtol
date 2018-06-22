@@ -6,11 +6,10 @@ namespace CastleGrimtol.Project
 {
     public class Room : IRoom
     {
-        public Dictionary<string, Room> exits = new Dictionary<string, Room>();
+        public Dictionary<string, Room> Exits = new Dictionary<string, Room>();
         public string Name { get; set; }
         public string Description { get; set; }
-
-        
+        public Boolean Activated { get; set; }
         public List<Item> Items { get; set; }
 
 
@@ -21,22 +20,11 @@ namespace CastleGrimtol.Project
        
         
         public Room Go(string direction){ //ask questions about that
-            if(exits.ContainsKey(direction)){
-                return exits[direction]; //returns the value from the key exits[direction] 
+            if(Exits.ContainsKey(direction)){
+                return Exits[direction]; //returns the value from the key exits[direction] 
             }
             return null;
         }
-        
-        // public Item itemsForRoom(List<Item> items) 
-        // {
-        //     if(items==empt)){
-                
-        //        //
-        //         return exits[direction];
-        //     }
-
-        //     return null;    
-        // }
         public void UseItem(Item item)
         {
            if(item.Name == "scroll"){
@@ -56,6 +44,7 @@ namespace CastleGrimtol.Project
         public Room(string name, string description){
             Name = name;
             Description = description;
+            Activated = false;
             Items = new List<Item>();
          //   exits = new Dictionary<string, Room>();
         }

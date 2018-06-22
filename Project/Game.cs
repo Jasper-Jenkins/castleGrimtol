@@ -19,51 +19,25 @@ namespace CastleGrimtol.Project
         {
 
 
-            //         var t = Task.Run(async delegate
-            //           {
-            //              await Task.Delay(1000);
-            //              return 42;
-            //           });
-            //   t.Wait();
-            //   Console.WriteLine("Task t Status: {0}, Result: {1}",
-            //                     t.Status, t.Result);
             if (CurrentPlayer.Alive == true)
             {
+
                 Console.WriteLine("Still Alive!");
             }
             else
             {
-                Console.Clear();
+                //   Console.Clear();
                 Console.WriteLine("You fucked up!");
                 Reset();
             }
             //  Console.Clear();
+            displayInventory();
             Console.WriteLine("You are in the " + CurrentRoom.Name + " room!");
-            // if (CurrentRoom.Items.Count == 0)
-            // {
-            //     Console.WriteLine(CurrentRoom.Description);
-            //     Console.WriteLine("The room is empty, except for you!");
-            // }
-            // else
-            // {
-            //     string roomItems = "";
-            //     for (var i = 0; i < CurrentRoom.Items.Count; i++)
-            //     {
-            //         if (i == CurrentRoom.Items.Count - 1 && CurrentRoom.Items.Count > 1)
-            //         {
-            //             roomItems += "and ";
-            //         }
-            //         roomItems += CurrentRoom.Items[i].Name + " ";
-            //     }
-            //     Console.WriteLine(CurrentRoom.Description);
-            //     Console.WriteLine(@"There is a " + roomItems + "in the room");
-            // }
             Console.WriteLine("What would you like to do!");
-
             string userInput = "";
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            //      Console.ForegroundColor = ConsoleColor.DarkMagenta;
             userInput = Console.ReadLine().ToLower().Trim();
-            Console.ForegroundColor = ConsoleColor.White;
+            //   Console.ForegroundColor = ConsoleColor.White;
             string[] input = userInput.Split(" ");
             if (input.Length > 2)
             {
@@ -71,18 +45,8 @@ namespace CastleGrimtol.Project
 
                 input[1] = input[1] + " " + input[2];
             }
-            // for (var i = 0; i < input.Length; i++)
-            // {
-            //   if(input.Length>2){
-            //     Console.Write(input[1]+" "+input[2]);
-            //   }
-            //      var j = Task.Run(async delegate
-            // {
-            //     await Task.Delay(1000);
-            //     return "";
-            // });
-            // j.Wait();
-            // };
+
+            //USER COMMANDS
             switch (input[0])
             {
                 case "restart":
@@ -378,7 +342,7 @@ namespace CastleGrimtol.Project
         {
             Console.WriteLine(@"                                       Enter your name traveler: 
                         ");
-            string userName = Console.ReadLine();
+            string userName = Console.ReadLine().Trim();
             Player player1 = new Player(userName);
             inGame = true;
             string tester = "Welcome " + userName + " to the Super Fun Time Murder Dungeon!";
@@ -398,6 +362,7 @@ namespace CastleGrimtol.Project
                 return "";
             });
             k.Wait();
+            Console.Clear();
 
             Room room1 = new Room("main", "The room is pitch black, other than a faint glow on the ground.");
             Room room2 = new Room("north", "The room is freezing, and everything is covered in ice.");
@@ -413,25 +378,30 @@ namespace CastleGrimtol.Project
             Item fireOrb = new Item("fire orb", "Emits a fierce heat, but doesnt burn when touched.");
 
 
-            room1.exits.Add("scroll", room4);
-            room1.exits.Add("north", room2);
-            room1.exits.Add("east", room3);
-            room1.exits.Add("west", room5);
+            //  room1.Exits.Add("scroll", room4);
+            room2.Exits.Add("scroll", room4);
+            room3.Exits.Add("scroll", room4);
+            room5.Exits.Add("scroll", room4);
+            //
+            room1.Exits.Add("scroll", room4);
+            room1.Exits.Add("north", room2);
+            room1.Exits.Add("east", room3);
+            room1.Exits.Add("west", room5);
 
             room1.Items.Add(torch);
             room1.Items.Add(sword);
             room1.Items.Add(scroll);
             room2.Items.Add(iceOrb);
-            room2.Items.Add(fireOrb);
-            room3.Items.Add(magicOrb);
+            room3.Items.Add(fireOrb);
+            room5.Items.Add(magicOrb);
 
-            room2.exits.Add("south", room1);
+            room2.Exits.Add("south", room1);
 
-            room3.exits.Add("west", room1);
+            room3.Exits.Add("west", room1);
 
-            room4.exits.Add("main", room1);
+            room4.Exits.Add("main", room1);
 
-            room5.exits.Add("east", room1);
+            room5.Exits.Add("east", room1);
 
             CurrentRoom = room1;
             CurrentPlayer = player1;
@@ -442,7 +412,7 @@ namespace CastleGrimtol.Project
             switch (itemName)
             {
                 case "scroll":
-                    if (CurrentRoom.Name == "main")
+                    if (CurrentRoom.Name != "scroll")
                     {
                         Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("scroll"));
                         if (usedItem != null)
@@ -501,9 +471,35 @@ namespace CastleGrimtol.Project
                         Item usedItem = CurrentPlayer.Inventory.Find(x => x.Name.Contains("sword"));
                         if (usedItem != null)
                         {
-                            CurrentRoom.UseItem(usedItem);
-                            CurrentPlayer.Alive = false;
-                            //CurrentRoom = CurrentRoom.Go("main");
+                            Item fire = CurrentPlayer.Inventory.Find(x => x.Name.Contains("fire orb"));
+                            //Item ice = CurrentPlayer.Inventory.Fird(x => x.Name.Contains("ice orb"));
+                            if (CurrentRoom.Activated != true)
+                            {
+                                if (fire != null)
+                                {
+                                    Console.WriteLine(@"  
+        You move towards the Dragon knowing its either you or him. It is surprised momentarily 
+        at the fact that such a puny creture would challenge its might. The Dragon opens its maw 
+        and breathes forth a terrifying display of fire that washes over you. The fire orb glows 
+        brightly as the Dragon fire surround you. You continue forward unhindered and slam the sword 
+        into the Dragons belly. 
+         ");
+                                CurrentRoom.Activated = true;
+                                }
+                                else
+                                {
+                                    Console.WriteLine(@"   
+        You move towards the Dragon knowing its either you or him. It is surprised momentarily at the 
+        fact that such a puny creture would challenge its might. The Dragon opens its maw and breathes 
+        forth a terrifying display of fire that washes over you. The searing flame burns the flesh and 
+        organs from your skeleton. You take one last awkward step as the last bit of muscle is burned 
+        off your bones. 
+        ");
+                                    CurrentPlayer.Alive = false;
+                                }
+                            }else{
+                                Console.WriteLine(@"        You look at the corpse of the Dragon and wonder how the hell you could have survived! You poke at it a few times with your sword!");
+                            }
                             break;
                         }
                         else
@@ -526,8 +522,18 @@ namespace CastleGrimtol.Project
                     }
                     else
                     {
+                        Item frosty = CurrentPlayer.Inventory.Find(x => x.Name.Contains("ice orb"));
+                        CurrentPlayer.Inventory.Remove(frosty);
+                        CurrentRoom.Items.Add(frosty);
 
-                        Console.WriteLine("You have used the ice orb to disastrous effect.");
+                        Console.WriteLine(@"
+                        You kneel near the edge of the water and place the orb in. It slowly dips below the  
+                        surface and a soft white-blue light flashes through the water. The sound of cracking ice 
+                        fills your ears as you look over a now frozen lake.
+                        ");
+                        CurrentRoom.Activated = true;
+
+
                     }
 
                     break;
@@ -551,40 +557,195 @@ namespace CastleGrimtol.Project
 
         public void TakeItem(string itemName)
         {
-
-            Console.Clear();
-            var checker = 0;
-            Item partialItemName = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
-            if (partialItemName != null)
+            if (CurrentRoom.Name == "east" && (itemName == "fire orb" || itemName == "orb"))
             {
-                string temp = partialItemName.Name;
-
-                for (var i = 0; i < CurrentRoom.Items.Count; i++)
+                Item item = CurrentRoom.Items.Find(x => x.Name.Contains("ice orb"));
+                if (item != null)
                 {
-                    if (temp == CurrentRoom.Items[i].Name)
+                    Console.Clear();
+                    Console.WriteLine("Good work moron");
+                    var checker = 0;
+                    Item partialItemName = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
+                    if (partialItemName != null)
                     {
-                        checker++;
+
+                        string temp = partialItemName.Name;
+
+                        for (var i = 0; i < CurrentRoom.Items.Count; i++)
+                        {
+                            if (temp == CurrentRoom.Items[i].Name)
+                            {
+                                checker++;
+                            }
+                            if (itemName != temp)
+                            {
+                                CurrentPlayer.Inventory.Add(partialItemName);
+                                CurrentRoom.Items.Remove(partialItemName);
+                                Console.WriteLine("You have picked up a " + partialItemName.Name);
+                            }
+                            else if (itemName == CurrentRoom.Items[i].Name)
+                            {
+                                string iName = CurrentRoom.Items[i].Name;
+                                CurrentPlayer.Inventory.Add(CurrentRoom.Items[i]);
+                                CurrentRoom.Items.Remove(CurrentRoom.Items[i]);
+                                Console.WriteLine("You have picked up a " + iName);
+                            }
+
+                        }
+                        if (checker < 1)
+                        {
+                            Console.WriteLine("There is no " + itemName + " in this room.");
+                        }
                     }
-                    if (itemName != temp)
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("You attempt to move towards the fire and fall into the water, only to find out the water is infested pirahnas. The eat you! The end");
+                }
+            }
+            else if (CurrentRoom.Name == "west" && itemName == "magic orb")
+            {
+                Item item = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
+                if (item != null)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Good work moron");
+                    var checker = 0;
+                    Item partialItemName = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
+                    if (partialItemName != null)
                     {
-                        CurrentPlayer.Inventory.Add(partialItemName);
-                        CurrentRoom.Items.Remove(partialItemName);
-                        Console.WriteLine("You have picked up a " + partialItemName.Name);
+
+                        string temp = partialItemName.Name;
+
+                        for (var i = 0; i < CurrentRoom.Items.Count; i++)
+                        {
+                            if (temp == CurrentRoom.Items[i].Name)
+                            {
+                                checker++;
+                            }
+                            if (itemName != temp)
+                            {
+                                CurrentPlayer.Inventory.Add(partialItemName);
+                                CurrentRoom.Items.Remove(partialItemName);
+                                Console.WriteLine("You have picked up a " + partialItemName.Name);
+                            }
+                            else if (itemName == CurrentRoom.Items[i].Name)
+                            {
+                                string iName = CurrentRoom.Items[i].Name;
+                                CurrentPlayer.Inventory.Add(CurrentRoom.Items[i]);
+                                CurrentRoom.Items.Remove(CurrentRoom.Items[i]);
+                                Console.WriteLine("You have picked up a " + iName);
+                            }
+
+                        }
+                        if (checker < 1)
+                        {
+                            Console.WriteLine("There is no " + itemName + " in this room.");
+                        }
                     }
-                    else if (itemName == CurrentRoom.Items[i].Name)
+                    else
                     {
-                        string iName = CurrentRoom.Items[i].Name;
-                        CurrentPlayer.Inventory.Add(CurrentRoom.Items[i]);
-                        CurrentRoom.Items.Remove(CurrentRoom.Items[i]);
-                        Console.WriteLine("You have picked up a " + iName);
+                        Console.Clear();
+                        Console.WriteLine("You attempt to move towards the fire and fall into the water, only to find out the water is infested pirahnas. The eat you! The end");
                     }
 
                 }
-                if (checker < 1)
+            }
+            else
+            {
+                Console.Clear();
+                var checker = 0;
+                Item partialItemName = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
+                if (partialItemName != null)
                 {
-                    Console.WriteLine("There is no " + itemName + " in this room.");
+
+                    string temp = partialItemName.Name;
+
+
+
+                    for (var i = 0; i < CurrentRoom.Items.Count; i++)
+                    {
+                        if (temp == CurrentRoom.Items[i].Name)
+                        {
+                            checker++;
+                        }
+                        if (itemName != temp)
+                        {
+                            CurrentPlayer.Inventory.Add(partialItemName);
+                            CurrentRoom.Items.Remove(partialItemName);
+                            Console.WriteLine("You have picked up a " + partialItemName.Name);
+                        }
+                        else if (itemName == CurrentRoom.Items[i].Name)
+                        {
+                            string iName = CurrentRoom.Items[i].Name;
+                            CurrentPlayer.Inventory.Add(CurrentRoom.Items[i]);
+                            CurrentRoom.Items.Remove(CurrentRoom.Items[i]);
+                            Console.WriteLine("You have picked up a " + iName);
+                        }
+
+                    }
+                    if (checker < 1)
+                    {
+                        Console.WriteLine("There is no " + itemName + " in this room.");
+                    }
                 }
             }
         }
+        public void displayInventory()
+        {
+            //  Console.Clear();
+
+            if (CurrentPlayer.Inventory.Count == 0)
+            {
+                Console.WriteLine("You have no items!");
+            }
+            else
+            {
+                Console.WriteLine("Inventory: ");
+                for (var i = 0; i < CurrentPlayer.Inventory.Count; i++)
+                {
+                    if (CurrentPlayer.Inventory[i].Name == "sword")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("                       " + CurrentPlayer.Inventory[i].Name + " ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else if (CurrentPlayer.Inventory[i].Name == "scroll")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine("                       " + CurrentPlayer.Inventory[i].Name + " ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else if (CurrentPlayer.Inventory[i].Name == "torch")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("                       " + CurrentPlayer.Inventory[i].Name + " ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else if (CurrentPlayer.Inventory[i].Name == "ice orb")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("                       " + CurrentPlayer.Inventory[i].Name + " ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else if (CurrentPlayer.Inventory[i].Name == "fire orb")
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("                       " + CurrentPlayer.Inventory[i].Name + " ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else
+                    {
+                        Console.WriteLine("                       " + CurrentPlayer.Inventory[i].Name + " ");
+                    }
+                }
+            }
+        }
+        // public void RoomExits(){
+        //     foreach(string k in CurrentRoom.Exits){
+        //         Console.WriteLine($"{k}");
+        //     }
+        // }
     }
 }
