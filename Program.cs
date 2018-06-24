@@ -11,7 +11,14 @@ namespace textadventure
             
            // bool inGame = true;
             while(castleGame.inGame){
-              
+            
+            //use 'wizard' as your name to get cheats for accessing the scroll room and using the magic orb.
+
+
+
+
+
+
                 castleGame.Play();
             
             }
