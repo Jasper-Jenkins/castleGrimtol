@@ -21,18 +21,37 @@ namespace CastleGrimtol.Project
             if (CurrentPlayer.Alive == false)
             {
                 Console.WriteLine("You died!");
-                Reset();
+                Console.WriteLine("Would you like to play again?");
+                string choose = Console.ReadLine();
+                if(choose == "yes"){
+                    Reset();
+               
+                }else if(choose == "no"){ //DOESNT WORK PROPERLY.. itnerates through the game for a bit before the inGame is caught.
+                    inGame = false;
+                }
+           
             }
 
-            for (var i = 0; i < CurrentPlayer.Inventory.Count; i++)
-            {
+            // for (var i = 0; i < CurrentPlayer.Inventory.Count; i++)
+            // {
                 Item searchy = CurrentPlayer.Inventory.Find(x => x.Name.Contains("torch"));
                 if (searchy != null)
                 {
                     //     Console.Clear();
                     UseItem(searchy.Name);
                 }
-            }
+         //   }
+
+//
+//
+// Cant use 'help' in west room.
+//
+//
+
+
+
+
+           
             displayInventory();
             Console.WriteLine("You are in the " + CurrentRoom.Name + " room!");
             Console.WriteLine("What would you like to do!");
@@ -40,7 +59,9 @@ namespace CastleGrimtol.Project
             //      Console.ForegroundColor = ConsoleColor.DarkMagenta;
             userInput = Console.ReadLine().ToLower().Trim();
             //   Console.ForegroundColor = ConsoleColor.White;
+          
             string[] input = userInput.Split(" ");
+            
             if (input.Length > 2)
             {
                 //Console.Write(input[1]+" "+input[2]);
@@ -337,13 +358,20 @@ namespace CastleGrimtol.Project
                     Console.WriteLine("\"" + input[0] + "\" is not a proper Command, figure out what else you can do");
                     break;
             };
-
+      
         }
         public void Setup()
         {
             Console.WriteLine(@"                                       Enter your name traveler: 
                         ");
             string userName = Console.ReadLine().Trim();
+            if(userName == ""){
+                Console.Clear();
+                Console.WriteLine("You must enter a name!");
+                Console.WriteLine(@"                                       Enter your name traveler: 
+                        ");
+            userName = Console.ReadLine().Trim();
+            }
             Player player1 = new Player(userName);
             inGame = true;
             string tester = "Welcome " + userName + " to the Super Fun Time Murder Dungeon!";
@@ -419,7 +447,7 @@ namespace CastleGrimtol.Project
             {
 
                 case "torch":
-                    Console.Clear();
+                   // Console.Clear();
                     Console.WriteLine("Room exits: ");
                     foreach (KeyValuePair<string, Room> i in CurrentRoom.Exits)
                     {
@@ -470,29 +498,50 @@ namespace CastleGrimtol.Project
                                     Console.ForegroundColor = ConsoleColor.White;
                                     Console.Write(", ");
                                 }
+                                else if (CurrentRoom.Items[i].Name == "ice orb")
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    Console.Write(CurrentRoom.Items[i].Name);
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(", ");
+                                }
+                                else if (CurrentRoom.Items[i].Name == "magic orb")
+                                {
+                                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                                    Console.Write(CurrentRoom.Items[i].Name);
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(", ");
+                                }
+                                else if (CurrentRoom.Items[i].Name == "fire orb")
+                                {
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.Write(CurrentRoom.Items[i].Name);
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(", ");
+                                }
                                 else
                                 {
-                                    if (CurrentRoom.Items[i].Name == "torch")
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Yellow;
-                                        Console.Write(CurrentRoom.Items[i].Name);
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                        Console.Write(", ");
-                                    }
-                                    else if (CurrentRoom.Items[i].Name == "sword")
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                                        Console.Write(CurrentRoom.Items[i].Name);
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                        Console.Write(", ");
-                                    }
-                                    else if (CurrentRoom.Items[i].Name == "scroll")
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Magenta;
-                                        Console.Write(CurrentRoom.Items[i].Name);
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                        Console.Write(", ");
-                                    }
+                                    // if (CurrentRoom.Items[i].Name == "torch")
+                                    // {
+                                    //     Console.ForegroundColor = ConsoleColor.Yellow;
+                                    //     Console.Write(CurrentRoom.Items[i].Name);
+                                    //     Console.ForegroundColor = ConsoleColor.White;
+                                    //     Console.Write(", ");
+                                    // }
+                                    // else if (CurrentRoom.Items[i].Name == "sword")
+                                    // {
+                                    //     Console.ForegroundColor = ConsoleColor.DarkGray;
+                                    //     Console.Write(CurrentRoom.Items[i].Name);
+                                    //     Console.ForegroundColor = ConsoleColor.White;
+                                    //     Console.Write(", ");
+                                    // }
+                                    // else if (CurrentRoom.Items[i].Name == "scroll")
+                                    // {
+                                    //     Console.ForegroundColor = ConsoleColor.Magenta;
+                                    //     Console.Write(CurrentRoom.Items[i].Name);
+                                    //     Console.ForegroundColor = ConsoleColor.White;
+                                    //     Console.Write(", ");
+                                    // }
                                     // Console.Write(@"" + CurrentRoom.Items[i].Name + ", "
                                     // );
                                 }
@@ -517,6 +566,27 @@ namespace CastleGrimtol.Project
                                 else if (CurrentRoom.Items[i].Name == "scroll")
                                 {
                                     Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.Write(CurrentRoom.Items[i].Name);
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(" ");
+                                }
+                                 else if (CurrentRoom.Items[i].Name == "ice orb")
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    Console.Write(CurrentRoom.Items[i].Name);
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(" ");
+                                }
+                                else if (CurrentRoom.Items[i].Name == "magic orb")
+                                {
+                                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                                    Console.Write(CurrentRoom.Items[i].Name);
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(" ");
+                                }
+                                else if (CurrentRoom.Items[i].Name == "fire orb")
+                                {
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
                                     Console.Write(CurrentRoom.Items[i].Name);
                                     Console.ForegroundColor = ConsoleColor.White;
                                     Console.Write(" ");
@@ -621,7 +691,9 @@ namespace CastleGrimtol.Project
                             }
                             else
                             {
-                                Console.WriteLine(@"        You look at the corpse of the Dragon and wonder how the hell you could have survived! You poke at it a few times with your sword!");
+                                Console.WriteLine(@"       
+        You look at the corpse of the Dragon and wonder how the hell you could have survived! 
+        You poke at it a few times with your sword!");
                             }
                             break;
                         }
@@ -658,6 +730,14 @@ namespace CastleGrimtol.Project
                         string yaDone = "";
                         yaDone = Console.ReadLine().ToLower().Trim();
 
+                        switch(yaDone)
+                        {
+                            case "yes":
+                            {
+
+                            }
+                            break;
+                        }
                         if (yaDone == "yes")
                         {
                             inGame = true;
@@ -712,25 +792,43 @@ namespace CastleGrimtol.Project
             }
         }
 
+        public void youDied(string doa){
+            string temp = doa;
+            
+            switch(temp){
+                case "yes":
+                {
+
+                }
+                break;
+                default:
+                {
+
+                }
+                break;
+            }
+
+        }
+
         public void TakeItem(string itemName)
         {
-            // switch(itemName){
-            //     case :
-            // }
+          switch(itemName){
+            case "fire orb":
+            {
 
-
-
-
-
-
-
-            if (CurrentRoom.Name == "east" && (itemName == "fire orb" || itemName == "orb"))
+            } 
+            break;       
+          }  
+          if (CurrentRoom.Name == "east" && (itemName == "fire orb" || itemName == "orb"))
             {
                 Item ice = CurrentRoom.Items.Find(x => x.Name.Contains("ice orb"));
+              //  Console.ForegroundColor = ConsoleColor.DarkRed;
+                Item fire = CurrentRoom.Items.Find(x=> x.Name.Contains("fire orb"));
+                Console.ForegroundColor = ConsoleColor.White;
                 if (ice != null && CurrentRoom.Activated == true)
                 {
                     Console.Clear();
-                    Console.WriteLine("Good work moron");
+                  //  Console.WriteLine("Good work moron");
                     var checker = 0;
                     Item partialItemName = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
                     if (partialItemName != null)
@@ -757,7 +855,6 @@ namespace CastleGrimtol.Project
                                 CurrentRoom.Items.Remove(CurrentRoom.Items[i]);
                                 Console.WriteLine("You have picked up a " + iName);
                             }
-
                         }
                         if (checker < 1)
                         {
@@ -768,8 +865,28 @@ namespace CastleGrimtol.Project
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("You attempt to move towards the fire and fall into the water, only to find out the water is infested pirahnas. The eat you! The end");
-                    CurrentPlayer.Alive = false;
+                    Console.Write(@"
+        You jump into the water and swim towards the ");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write($"{fire.Name}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(@". As you paddle intently across the  
+        water you feel a slimy and firm sensation sliding around the back of your neck
+        working its way quickly around to the front. A quick jerk and you feel your neck 
+        break as you are pulled into the dark water.
+                    ");
+                    Item magic = CurrentPlayer.Inventory.Find(x=>x.Name.Contains("scroll"));    
+                    if(magic != null){
+                        Console.WriteLine(@"
+        The scroll in your pocket senses the energy in your body diminishing. You become 
+        translucent and slip from the grasp of the creature that pulled you under water.
+        Your body floats back to the entrance of the room and reforms. You are oddly aware 
+        that you just died and are surprised to find yourself looking back at the water 
+        you were just swimming through. 
+                    ");        
+                    }else{
+                        CurrentPlayer.Alive = false; 
+                    }
                 }
             }
             else if (CurrentRoom.Name == "west" && (itemName == "magic orb" || itemName == "orb"))
@@ -782,13 +899,17 @@ namespace CastleGrimtol.Project
                     if (CurrentRoom.Activated != true)
                     {
 
-                        Console.WriteLine("You attempt to walk around the Dragon to get the Magic Orb. The Dragon lifts it arm and effortlessly crushes you to death");
+                        Console.WriteLine(@"
+            You attempt to walk around the Dragon to get the Magic Orb. 
+            he Dragon lifts it arm and effortlessly crushes you to death
+                        ");
                         CurrentPlayer.Alive = false;
+
                     }
                     else
                     {
                         Console.Clear();
-                        Console.WriteLine("Good work moron");
+                        //Console.WriteLine("Good work moron");
                         var checker = 0;
                         Item purpleOrb = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
                         if (purpleOrb != null)
