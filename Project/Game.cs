@@ -23,45 +23,79 @@ namespace CastleGrimtol.Project
                 Console.WriteLine("You died!");
                 Console.WriteLine("Would you like to play again?");
                 string choose = Console.ReadLine();
-                if(choose == "yes"){
+                if (choose == "yes")
+                {
                     Reset();
-               
-                }else if(choose == "no"){ //DOESNT WORK PROPERLY.. itnerates through the game for a bit before the inGame is caught.
+
+                }
+                else if (choose == "no")
+                { //DOESNT WORK PROPERLY.. itnerates through the game for a bit before the inGame is caught.
                     inGame = false;
                 }
-           
+
             }
 
             // for (var i = 0; i < CurrentPlayer.Inventory.Count; i++)
             // {
-                Item searchy = CurrentPlayer.Inventory.Find(x => x.Name.Contains("torch"));
-                if (searchy != null)
-                {
-                    //     Console.Clear();
-                    UseItem(searchy.Name);
-                }
-         //   }
+            Item searchy = CurrentPlayer.Inventory.Find(x => x.Name.Contains("torch"));
+            if (searchy != null)
+            {
+                //     Console.Clear();
+                UseItem(searchy.Name);
+            }
+            //   }
 
-//
-//
-// Cant use 'help' in west room.
-//
-//
-
-
+            //
+            //
+            // Cant use 'help' in west room.
+            //
+            //
 
 
-           
-            displayInventory();
+
+
+
+
             Console.WriteLine("You are in the " + CurrentRoom.Name + " room!");
+            if (CurrentRoom.Name == "west") //WEST ROOM IS ON FIRE SO YOU SHOULDNT NEED A TORCH TO SEE WHATS IN THE ROOM.
+            {
+                Item torchy = CurrentPlayer.Inventory.Find(x => x.Name.Contains("torch"));
+                if (torchy != null)
+                {
+
+                }
+                else
+                {
+                    UseItem("torch");
+                }
+                if (CurrentRoom.Activated != true)
+                {
+                    Console.WriteLine(@"A Dragon is in the room");
+                }
+                else
+                {
+                    Console.WriteLine(@"The Dragaon lays dead.");
+                }
+            }
+            displayInventory();
+            if (CurrentPlayer.Deaths == 0)
+            {
+
+            }
+            else
+            {
+                Console.WriteLine($"You have died {CurrentPlayer.Deaths} times.");
+            }
+
             Console.WriteLine("What would you like to do!");
+             Console.WriteLine("\'help\' can guide you");
             string userInput = "";
             //      Console.ForegroundColor = ConsoleColor.DarkMagenta;
             userInput = Console.ReadLine().ToLower().Trim();
             //   Console.ForegroundColor = ConsoleColor.White;
-          
+
             string[] input = userInput.Split(" ");
-            
+
             if (input.Length > 2)
             {
                 //Console.Write(input[1]+" "+input[2]);
@@ -358,19 +392,22 @@ namespace CastleGrimtol.Project
                     Console.WriteLine("\"" + input[0] + "\" is not a proper Command, figure out what else you can do");
                     break;
             };
-      
+
         }
         public void Setup()
         {
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine(@"                                       Enter your name traveler: 
                         ");
             string userName = Console.ReadLine().Trim();
-            if(userName == ""){
+            if (userName == "")
+            {
                 Console.Clear();
                 Console.WriteLine("You must enter a name!");
                 Console.WriteLine(@"                                       Enter your name traveler: 
                         ");
-            userName = Console.ReadLine().Trim();
+                userName = Console.ReadLine().Trim();
             }
             Player player1 = new Player(userName);
             inGame = true;
@@ -434,7 +471,7 @@ namespace CastleGrimtol.Project
 
             CurrentRoom = room1;
             CurrentPlayer = player1;
-            if(CurrentPlayer.Name == "wizard")
+            if (CurrentPlayer.Name == "wizard")
             {
                 CurrentPlayer.Inventory.Add(magicOrb);
                 CurrentPlayer.Inventory.Add(scroll);
@@ -447,7 +484,21 @@ namespace CastleGrimtol.Project
             {
 
                 case "torch":
-                   // Console.Clear();
+                    // Console.Clear();
+                    // Item torchch = CurrentPlayer.Inventory.Find(x=> x.Name.Contains("torch"));
+                    // if(torchch != null){
+
+                    // }
+                    //         if(CurrentRoom.Name == "west"){  
+                    //         Console.WriteLine(@"
+                    // The room is already illuminated");
+                    //         }
+
+
+
+
+                    //  if(CurrentRoom.Lit == false){
+                    //   Console.Clear();
                     Console.WriteLine("Room exits: ");
                     foreach (KeyValuePair<string, Room> i in CurrentRoom.Exits)
                     {
@@ -570,7 +621,7 @@ namespace CastleGrimtol.Project
                                     Console.ForegroundColor = ConsoleColor.White;
                                     Console.Write(" ");
                                 }
-                                 else if (CurrentRoom.Items[i].Name == "ice orb")
+                                else if (CurrentRoom.Items[i].Name == "ice orb")
                                 {
                                     Console.ForegroundColor = ConsoleColor.Blue;
                                     Console.Write(CurrentRoom.Items[i].Name);
@@ -601,6 +652,13 @@ namespace CastleGrimtol.Project
 ");
                         Console.WriteLine(CurrentRoom.Description);
                     }
+                    CurrentRoom.Lit = true;
+                    //    }
+                    // else {
+                    //     Console.WriteLine("The room is already illuminated");
+                    //     CurrentRoom.Lit = false;
+                    // }
+
                     break;
                 case "scroll":
                     if (CurrentRoom.Name != "scroll")
@@ -679,14 +737,38 @@ namespace CastleGrimtol.Project
                                 }
                                 else
                                 {
-                                    Console.WriteLine(@"   
+                                    Item scrolly = CurrentPlayer.Inventory.Find(x => x.Name.Contains("scroll"));
+                                    if (scrolly != null)
+                                    {
+                                        Console.WriteLine(@"   
         You move towards the Dragon knowing its either you or him. It is surprised momentarily at the 
         fact that such a puny creture would challenge its might. The Dragon opens its maw and breathes 
         forth a terrifying display of fire that washes over you. The searing flame burns the flesh and 
         organs from your skeleton. You take one last awkward step as the last bit of muscle is burned 
         off your bones. 
         ");
-                                    CurrentPlayer.Alive = false;
+         Console.Write(@"
+        The");
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write(@" scroll");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(@" in your pocket senses the energy in your body diminishing. Your skeleton becomes 
+        translucent and stands up and walks back to the entrance of the room. The Dragon looks on in 
+        confusion as your body reforms back to its original state at the entrance of the room. 
+        ");
+        CurrentPlayer.Deaths++;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(@"   
+        You move towards the Dragon knowing its either you or him. It is surprised momentarily at the 
+        fact that such a puny creture would challenge its might. The Dragon opens its maw and breathes 
+        forth a terrifying display of fire that washes over you. The searing flame burns the flesh and 
+        organs from your skeleton. You take one last awkward step as the last bit of muscle is burned 
+        off your bones. 
+        ");
+                                        CurrentPlayer.Alive = false;
+                                    }
                                 }
                             }
                             else
@@ -730,13 +812,13 @@ namespace CastleGrimtol.Project
                         string yaDone = "";
                         yaDone = Console.ReadLine().ToLower().Trim();
 
-                        switch(yaDone)
+                        switch (yaDone)
                         {
                             case "yes":
-                            {
+                                {
 
-                            }
-                            break;
+                                }
+                                break;
                         }
                         if (yaDone == "yes")
                         {
@@ -754,7 +836,8 @@ namespace CastleGrimtol.Project
                 case "ice orb":
                     if (CurrentRoom.Name != "east")
                     {
-                        Console.WriteLine(@"The orb feels cool to the touch, but does nothing.");
+                        Console.WriteLine(@"
+        The orb feels cool to the touch, but does nothing.");
                     }
                     else
                     {
@@ -764,9 +847,9 @@ namespace CastleGrimtol.Project
                         CurrentRoom.Items.Add(frosty);
 
                         Console.WriteLine(@"
-                        You kneel near the edge of the water and place the orb in. It slowly dips below the  
-                        surface and a soft white-blue light flashes through the water. The sound of cracking ice 
-                        fills your ears as you look over a now frozen lake.
+            You kneel near the edge of the water and place the orb in. It slowly dips below the  
+            surface and a soft white-blue light flashes through the water. The sound of cracking ice 
+            fills your ears as you look over a now frozen lake.
                         ");
                         CurrentRoom.Activated = true;
 
@@ -792,50 +875,50 @@ namespace CastleGrimtol.Project
             }
         }
 
-        public void youDied(string doa){
+        public void youDied(string doa)
+        {
             string temp = doa;
-            
-            switch(temp){
+
+            switch (temp)
+            {
                 case "yes":
-                {
+                    {
 
-                }
-                break;
+                    }
+                    break;
                 default:
-                {
+                    {
 
-                }
-                break;
+                    }
+                    break;
             }
 
         }
 
-        public void TakeItem(string itemName)
+        public void TakeItem(string itemName) //taking magic orb doesnt work right now
         {
-          switch(itemName){
-            case "fire orb":
-            {
+            //   switch(itemName){
+            //     case "fire orb":
+            //     {
 
-            } 
-            break;       
-          }  
-          if (CurrentRoom.Name == "east" && (itemName == "fire orb" || itemName == "orb"))
+            //     } 
+            //     break;       
+            //   }  
+            if (CurrentRoom.Name == "east" && (itemName == "fire orb" || itemName == "orb"))
             {
                 Item ice = CurrentRoom.Items.Find(x => x.Name.Contains("ice orb"));
-              //  Console.ForegroundColor = ConsoleColor.DarkRed;
-                Item fire = CurrentRoom.Items.Find(x=> x.Name.Contains("fire orb"));
+                //  Console.ForegroundColor = ConsoleColor.DarkRed;
+                Item fire = CurrentRoom.Items.Find(x => x.Name.Contains("fire orb"));
                 Console.ForegroundColor = ConsoleColor.White;
                 if (ice != null && CurrentRoom.Activated == true)
                 {
                     Console.Clear();
-                  //  Console.WriteLine("Good work moron");
+                    //  Console.WriteLine("Good work moron");
                     var checker = 0;
                     Item partialItemName = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
                     if (partialItemName != null)
                     {
-
                         string temp = partialItemName.Name;
-
                         for (var i = 0; i < CurrentRoom.Items.Count; i++)
                         {
                             if (temp == CurrentRoom.Items[i].Name)
@@ -871,39 +954,77 @@ namespace CastleGrimtol.Project
                     Console.Write($"{fire.Name}");
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.Write(@". As you paddle intently across the  
-        water you feel a slimy and firm sensation sliding around the back of your neck
+        water you feel a slimey and firm sensation sliding around the back of your neck
         working its way quickly around to the front. A quick jerk and you feel your neck 
         break as you are pulled into the dark water.
                     ");
-                    Item magic = CurrentPlayer.Inventory.Find(x=>x.Name.Contains("scroll"));    
-                    if(magic != null){
-                        Console.WriteLine(@"
-        The scroll in your pocket senses the energy in your body diminishing. You become 
+                    Item magic = CurrentPlayer.Inventory.Find(x => x.Name.Contains("scroll"));
+                    if (magic != null)
+                    {
+                        Console.Write(@"
+        The");
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write(@" scroll");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(@" in your pocket senses the energy in your body diminishing. You become 
         translucent and slip from the grasp of the creature that pulled you under water.
         Your body floats back to the entrance of the room and reforms. You are oddly aware 
         that you just died and are surprised to find yourself looking back at the water 
         you were just swimming through. 
-                    ");        
-                    }else{
-                        CurrentPlayer.Alive = false; 
+                    ");
+                     CurrentPlayer.Deaths++;
+                    }
+                    else
+                    {
+                       
+                        CurrentPlayer.Alive = false;
                     }
                 }
             }
-            else if (CurrentRoom.Name == "west" && (itemName == "magic orb" || itemName == "orb"))
+            else if (CurrentRoom.Name == "west" && itemName == "magic orb") //( || itemName == "orb")
             {
-                Item item = CurrentRoom.Items.Find(x => x.Name.Contains(itemName));
-
-                //   Console.WriteLine("We have made it this far");
+                Item item = CurrentRoom.Items.Find(x => x.Name.Contains("magic orb"));
+                Console.Clear();
+                //    Console.WriteLine("We have made it this far");
                 if (item != null)
                 {
                     if (CurrentRoom.Activated != true)
                     {
-
-                        Console.WriteLine(@"
-            You attempt to walk around the Dragon to get the Magic Orb. 
-            he Dragon lifts it arm and effortlessly crushes you to death
+                        Item magic = CurrentPlayer.Inventory.Find(x => x.Name.Contains("scroll"));
+                        if (magic != null)
+                        {
+                            //    Console.Clear();
+                            Console.WriteLine(@"
+        You attempt to walk around the Dragon to get the Magic Orb. 
+        The Dragon lifts it arm and effortlessly crushes you to death!
                         ");
-                        CurrentPlayer.Alive = false;
+                            Console.Write(@"
+        The");
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.Write(@" scroll");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write(@" in your pocket senses the energy in your body diminishing. You become 
+        translucent and slip from beneath the heavy hand of the Dragon. The Dragon watches 
+        as your body floats back to the entrance of the room and reforms. Upset at the fact 
+        dinner has escaped, the dragon takes a deep breath as if its preparing to burn you 
+        to ash.       
+        ");
+                            CurrentPlayer.Deaths++;
+                        }
+                        else
+                        {
+
+                            Console.WriteLine(@"
+        You attempt to walk around the Dragon to get the Magic Orb. 
+        The Dragon lifts it arm and effortlessly crushes you to death!
+                        ");
+                            CurrentPlayer.Alive = false;
+                        }
+                        //             Console.WriteLine(@"
+                        // You attempt to walk around the Dragon to get the Magic Orb. 
+                        // he Dragon lifts it arm and effortlessly crushes you to death
+                        //             ");
+                        //             CurrentPlayer.Alive = false;
 
                     }
                     else
@@ -997,7 +1118,9 @@ namespace CastleGrimtol.Project
             }
             else
             {
-                Console.WriteLine("Inventory: ");
+
+                Console.WriteLine(@"
+                Inventory: ");
                 for (var i = 0; i < CurrentPlayer.Inventory.Count; i++)
                 {
                     if (CurrentPlayer.Inventory[i].Name == "sword")

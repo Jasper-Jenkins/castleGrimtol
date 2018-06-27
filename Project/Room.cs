@@ -10,6 +10,8 @@ namespace CastleGrimtol.Project
         public string Name { get; set; }
         public string Description { get; set; }
         public Boolean Activated { get; set; }
+
+        public Boolean Lit {get; set;}
         public List<Item> Items { get; set; }
 
 
@@ -45,6 +47,7 @@ namespace CastleGrimtol.Project
             Name = name;
             Description = description;
             Activated = false;
+            Lit = false;
             Items = new List<Item>();
          //   exits = new Dictionary<string, Room>();
         }
